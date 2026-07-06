@@ -1,7 +1,8 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT">
+  <img src="https://img.shields.io/github/license/xieyi138-star/scankit?color=orange" alt="MIT">
+  <img src="https://img.shields.io/github/stars/xieyi138-star/scankit?style=social" alt="GitHub stars">
   <img src="https://img.shields.io/badge/Python-3.11+-3670A0?logo=python" alt="Python 3.11+">
-  <img src="https://img.shields.io/badge/Docker-light-blue?logo=docker" alt="Docker">
+  <img src="https://img.shields.io/badge/Docker-Ready-blue?logo=docker" alt="Docker Ready">
 </p>
 
 <h1 align="center">ScanKit</h1>
@@ -13,7 +14,8 @@
 </p>
 
 <p align="center">
-  <a href="https://scankit.vercel.app/"><strong>Live Demo →</strong></a>
+  <a href="https://scankit.vercel.app/"><strong>🌐 Website</strong></a> ·
+  <a href="https://scankit.vercel.app/"><strong>🚀 Get API Key</strong></a>
 </p>
 
 ---
@@ -159,6 +161,12 @@ MIT — use it, fork it, self-host it, embed it. No strings.
 ---
 
 <p align="center">
-  <a href="https://scankit.vercel.app/"><strong>Website</strong></a> ·
-  <a href="https://github.com/xieyi138-star/scankit/issues"><strong>Request a Feature</strong></a>
+  <a href="https://scankit.vercel.app/"><strong>🌐 Website</strong></a> ·
+  <a href="https://github.com/xieyi138-star/scankit/issues"><strong>💡 Request a Feature</strong></a>
+</p>
+
+<hr>
+
+<p align="center">
+  <sub>Built by <a href="https://github.com/xieyi138-star">@xieyi138-star</a> · Also check out <a href="https://github.com/xieyi138-star/uptix">Uptix</a> — self-hosted status pages</sub>
 </p>
