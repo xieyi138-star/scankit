@@ -1,0 +1,6 @@
+{
+  "functions": {},
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
