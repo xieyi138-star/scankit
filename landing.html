@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScanKit — One API for barcodes, QR codes, and OCR</title>
+<style>
+  :root { --bg: #0a0a0c; --card: #111115; --border: #1e1e24; --text: #e4e4e8; --dim: #71717a; --green: #22c55e; --amber: #f59e0b; --accent: #f97316; --blue: #3b82f6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height:1.6; }
+  .container { max-width: 960px; margin:0 auto; padding:0 24px; }
+
+  .hero { text-align:center; padding:100px 0 60px; }
+  .badge { display:inline-block; background:rgba(249,115,22,0.1); color:var(--accent); border:1px solid rgba(249,115,22,0.2); border-radius:20px; padding:4px 14px; font-size:13px; font-weight:500; margin-bottom:24px; }
+  .hero h1 { font-size:52px; font-weight:800; letter-spacing:-0.03em; line-height:1.1; margin-bottom:20px; background: linear-gradient(135deg, #e4e4e8 0%, #a1a1aa 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .hero p { font-size:18px; color:var(--dim); max-width:540px; margin:0 auto 36px; }
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:12px 28px; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; text-decoration:none; }
+  .btn-primary { background:#fff; color:#0a0a0c; border:none; }
+  .btn-primary:hover { background:#e4e4e8; }
+  .btn-secondary { background:transparent; color:var(--text); border:1px solid var(--border); }
+  .btn-secondary:hover { border-color:#3f3f46; }
+  .btn-group { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+  .demo-box { max-width:720px; margin:48px auto 0; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .demo-box .code-block { background:#000; color:var(--green); font-family:'SF Mono','Fira Code',monospace; font-size:13px; padding:16px 20px; border-radius:8px; overflow-x:auto; margin-bottom:16px; }
+  .demo-box .result { display:flex; gap:16px; font-size:14px; }
+  .demo-box .result-col { flex:1; }
+  .demo-box .result-col h4 { font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--dim); margin-bottom:6px; }
+  .demo-box .result-col .val { color:var(--green); font-family:monospace; font-size:13px; }
+
+  .pain { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:48px; margin:80px auto; }
+  .pain h2 { font-size:28px; margin-bottom:8px; }
+  .pain>p { color:var(--dim); margin-bottom:32px; }
+  .pain-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:24px; }
+  .pain-card { background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:24px; }
+  .pain-card h3 { font-size:15px; margin-bottom:6px; }
+  .pain-card p { font-size:13px; color:var(--dim); }
+
+  .features { padding:0 0 80px; }
+  .features h2 { font-size:28px; text-align:center; margin-bottom:12px; }
+  .features>p { text-align:center; color:var(--dim); margin-bottom:48px; }
+  .feat-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; }
+  .feat-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:28px; }
+  .feat-card:hover { border-color:#3f3f46; }
+  .feat-card h3 { font-size:16px; margin-bottom:6px; }
+  .feat-card p { font-size:13px; color:var(--dim); }
+
+  .oneliner { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:28px 32px; margin:0 auto 80px; max-width:720px; }
+  .oneliner code { display:block; font-family:'SF Mono','Fira Code',monospace; font-size:14px; color:var(--green); }
+
+  .pricing { padding:0 0 80px; }
+  .pricing h2 { font-size:28px; text-align:center; margin-bottom:12px; }
+  .pricing>p { text-align:center; color:var(--dim); margin-bottom:48px; }
+  .price-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px; }
+  .price-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:32px; position:relative; }
+  .price-card.featured { border-color:var(--accent); }
+  .price-card.featured::before { content:'Most popular'; position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--accent); color:#fff; font-size:11px; font-weight:600; padding:2px 12px; border-radius:10px; }
+  .price-card h3 { font-size:18px; margin-bottom:4px; }
+  .price-card .price { font-size:36px; font-weight:800; margin:12px 0 4px; }
+  .price-card .price span { font-size:14px; font-weight:400; color:var(--dim); }
+  .price-card .sub { font-size:13px; color:var(--dim); margin-bottom:20px; }
+  .price-card ul { list-style:none; font-size:13px; }
+  .price-card ul li { padding:4px 0; color:var(--dim); }
+  .price-card ul li::before { content:'✓ '; color:var(--green); font-weight:700; }
+
+  .cta { text-align:center; padding:0 0 80px; }
+  .cta h2 { font-size:28px; margin-bottom:8px; }
+  .cta p { color:var(--dim); margin-bottom:24px; }
+  .email-form { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+  .email-form input { padding:12px 18px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); font-size:15px; min-width:280px; outline:none; }
+  .email-form input:focus { border-color:var(--accent); }
+  .email-form button { padding:12px 28px; border-radius:10px; background:#fff; color:#0a0a0c; border:none; font-size:15px; font-weight:600; cursor:pointer; }
+  .email-form button:hover { background:#e4e4e8; }
+
+  footer { text-align:center; padding:40px 0; font-size:13px; color:var(--dim); border-top:1px solid var(--border); }
+  footer a { color:var(--accent); text-decoration:none; }
+
+  @media (max-width:640px) { .hero h1 { font-size:34px; } .hero { padding:60px 0 40px; } .pain { padding:28px 20px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <section class="hero">
+    <div class="badge">API Beta · Free 100 calls/month</div>
+    <h1>One API call.<br>Barcodes + QR codes + OCR.<br>At the same time.</h1>
+    <p>Upload an image. Get back every barcode, every QR code, and all the text. No SDK. No setup. Just HTTP.</p>
+    <div class="btn-group">
+      <a href="#get-started" class="btn btn-primary">🔑 Get API Key</a>
+      <a href="https://github.com/xieyi138-star/scankit" class="btn btn-secondary">⭐ Star on GitHub</a>
+    </div>
+
+    <div class="demo-box">
+      <div class="code-block">$ curl -X POST https://api.scankit.dev/v1/decode \
+  -H "Authorization: Bearer sk_live_xxx" \
+  -F "image=@shipping_label.jpg"
+
+{
+  "barcodes": [
+    { "type": "CODE128", "value": "1Z999AA10123456784", "position": { "x": 120, "y": 45 } }
+  ],
+  "qr_codes": [],
+  "text": "SHIP TO:\nJohn Doe\n123 Main St...\nORDER #88471"
+}</div>
+      <div class="result">
+        <div class="result-col"><h4>Barcodes Found</h4><div class="val">1Z999AA10123456784</div><div style="color:var(--dim);font-size:12px;margin-top:2px">CODE128 · UPS tracking</div></div>
+        <div class="result-col"><h4>QR Codes Found</h4><div style="color:var(--dim);font-size:13px">none</div></div>
+        <div class="result-col"><h4>OCR Text</h4><div style="color:var(--dim);font-size:12px">"SHIP TO: John Doe..."</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pain">
+    <h2>The barcode + OCR landscape is two separate products.</h2>
+    <p>And neither one works well on its own.</p>
+    <div class="pain-grid">
+      <div class="pain-card"><h3>💸 Dynamsoft / LEADTOOLS</h3><p>$2,000+/year SDK licenses. Great for enterprises. Absurd for indie devs and startups.</p></div>
+      <div class="pain-card"><h3>🐛 ZXing (free, open-source)</h3><p>Misses ~1 in 6 damaged barcodes. No OCR. No REST API. Java library, not a service.</p></div>
+      <div class="pain-card"><h3>🔀 OCR + barcode: always separate</h3><p>Nobody combines them. You need pytesseract for text + pyzbar for barcodes. Two libraries, two pipelines, double the code.</p></div>
+      <div class="pain-card"><h3>📦 Cloudmersive (cloud-only)</h3><p>The only combined offering. But cloud-only, no self-host option, per-call pricing adds up fast.</p></div>
+      <div class="pain-card"><h3>📋 Shipping labels, invoices, receipts</h3><p>The most common use case — "read the tracking number AND the address" — has no single-call solution.</p></div>
+      <div class="pain-card"><h3>🖼️ Mobile photos: blurry, skewed</h3><p>Phone pictures of barcodes fail on ZXing. No pre-processing, no rotation correction, no deblurring.</p></div>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2>What ScanKit does</h2>
+    <p>Two endpoints. Everything you need.</p>
+    <div class="feat-grid">
+      <div class="feat-card"><h3>📸 /v1/decode</h3><p>Upload an image (JPG, PNG, PDF page). Get back all barcodes, QR codes, and OCR text. One call.</p></div>
+      <div class="feat-card"><h3>🔧 /v1/generate</h3><p>Generate QR codes, Code 128, EAN-13, UPC-A, Data Matrix, PDF417. Returns PNG or SVG. One line.</p></div>
+      <div class="feat-card"><h3>📐 Auto-rotation & deblur</h3><p>Phone photo of a shipping label at a weird angle? We fix it before decoding. Works where ZXing fails.</p></div>
+      <div class="feat-card"><h3>🔌 REST, not an SDK</h3><p>No language bindings. No native dependencies. No DLL hell. HTTP is the API. Works with curl, Python, Go, JS, anything.</p></div>
+      <div class="feat-card"><h3>🔐 Self-host or cloud</h3><p>MIT-licensed open core. Run it yourself with Docker. Or use our hosted API at $9/month.</p></div>
+      <div class="feat-card"><h3>📊 Usage dashboard</h3><p>See call counts, latency, error rates. Simple. No observability PhD required.</p></div>
+    </div>
+  </section>
+
+  <section class="oneliner">
+    <code>$ docker run -d -p 8080:8080 ghcr.io/xieyi138-star/scankit:latest</code>
+  </section>
+
+  <section class="pricing">
+    <h2>Pricing</h2>
+    <p>One is free forever. The other is cheaper than a single Dynamsoft license.</p>
+    <div class="price-grid">
+      <div class="price-card"><h3>Self-Hosted</h3><div class="price">$0<span>/month</span></div><div class="sub">MIT License. Your server.</div><ul><li>Unlimited API calls</li><li>All barcode formats</li><li>OCR included</li><li>Docker deploy</li><li>Community support</li></ul></div>
+      <div class="price-card featured"><h3>ScanKit Cloud</h3><div class="price">$9<span>/month</span></div><div class="sub">We host. You call.</div><ul><li>1,000 calls/month included</li><li>$0.01 per extra call</li><li>99.5% uptime SLA</li><li>Managed scaling</li><li>Email support</li></ul></div>
+      <div class="price-card"><h3>Pro</h3><div class="price">$29<span>/month</span></div><div class="sub">Higher limits. Faster.</div><ul><li>10,000 calls/month</li><li>$0.005 per extra call</li><li>Priority queue</li><li>PDF page support</li><li>99.9% SLA</li></ul></div>
+    </div>
+  </section>
+
+  <section class="cta" id="get-started">
+    <h2>Stop stitching together three libraries to read a shipping label.</h2>
+    <p>Join the waitlist. We'll send you an API key.</p>
+    <form class="email-form" id="waitlist-form">
+      <input type="email" id="waitlist-email" placeholder="you@example.com" required>
+      <button type="submit">Get Early Access →</button>
+    </form>
+    <p id="waitlist-success" style="display:none; color:var(--green); margin-top:12px; font-weight:600;">✅ You're on the list. API key incoming.</p>
+    <p id="waitlist-error" style="display:none; color:#ef4444; margin-top:12px;"></p>
+  </section>
+
+  <footer>
+    <p>ScanKit is open source under <a href="#">MIT License</a>. Built with Python + FastAPI.</p>
+    <p style="margin-top:8px"><a href="https://github.com/xieyi138-star/scankit">GitHub</a> · <a href="#">Docs</a> · <a href="#">Discord</a></p>
+  </footer>
+</div>
+<script>
+  document.getElementById('waitlist-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var btn = this.querySelector('button');
+    var email = document.getElementById('waitlist-email').value;
+    btn.textContent = 'Sending...'; btn.disabled = true;
+    try {
+      var res = await fetch('https://formspree.io/f/mgojqwga', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({email:email, product:'scankit'})
+      });
+      if (res.ok) {
+        document.getElementById('waitlist-form').style.display='none';
+        document.getElementById('waitlist-success').style.display='block';
+      } else {
+        var d = await res.json();
+        document.getElementById('waitlist-error').textContent = d.error || 'Something went wrong.';
+        document.getElementById('waitlist-error').style.display='block';
+      }
+    } catch(err) {
+      document.getElementById('waitlist-error').textContent = 'Network error. Try again.';
+      document.getElementById('waitlist-error').style.display='block';
+    }
+    btn.textContent = 'Get Early Access →'; btn.disabled = false;
+  });
+</script>
+</body>
+</html>
